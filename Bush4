@@ -1,0 +1,86 @@
+Задание 3-8
+#!/bin/bash
+
+secret_number=$((RANDOM % 100 + 1))
+attempts=7
+
+echo "Я загадал число от 1 до 100. Попробуйте угадать его!"
+
+while [ $attempts -gt 0 ]; do
+    read -p "Введите ваше предположение: " guess
+
+    if ! [[ "$guess" =~ ^[0-9]+$ ]]; then
+        echo "Пожалуйста, введите целое число."
+        continue
+    fi
+
+    if [ "$guess" -lt "$secret_number" ]; then
+        echo "Больше!"
+    elif [ "$guess" -gt "$secret_number" ]; then
+        echo "Меньше!"
+    else
+        echo "Поздравляю! Вы угадали число!"
+        exit 0
+    fi
+
+    attempts=$((attempts - 1))
+    echo "У вас осталось попыток: $attempts"
+done
+
+echo "К сожалению, вы не угадали число. Загаданное число было: $secret_number"
+
+Задание 3-9
+#!/bin/bash
+
+print_error_ru() {
+    echo "Ошибка: $1"
+}
+
+print_error_en() {
+    echo "Error: $1"
+}
+
+code_to_error_ru() {
+    case $1 in
+        1) echo "Ошибка 1: Неверный ввод." ;;
+        2) echo "Ошибка 2: Файл не найден." ;;
+        3) echo "Ошибка 3: Доступ запрещен." ;;
+        *) echo "Неизвестная ошибка." ;;
+    esac
+}
+
+code_to_error_en() {
+    case $1 in
+        1) echo "Error 1: Invalid input." ;;
+        2) echo "Error 2: File not found." ;;
+        3) echo "Error 3: Access denied." ;;
+        *) echo "Unknown error." ;;
+    esac
+}
+
+declare -A error_messages_ru=(
+    [1]="Ошибка 1: Неверный ввод."
+    [2]="Ошибка 2: Файл не найден."
+    [3]="Ошибка 3: Доступ запрещен."
+)
+
+declare -A error_messages_en=(
+    [1]="Error 1: Invalid input."
+    [2]="Error 2: File not found."
+    [3]="Error 3: Access denied."
+)
+
+code_to_error_ru_assoc() {
+    echo "${error_messages_ru[$1]:-Неизвестная ошибка.}"
+}
+
+code_to_error_en_assoc() {
+    echo "${error_messages_en[$1]:-Unknown error.}"
+}
+
+print_error_ru "Произошла ошибка."
+print_error_en "An error occurred."
+code_to_error_ru 1
+code_to_error_en 2
+code_to_error_ru_assoc 3
+code_to_error_en_assoc 4
